@@ -1,0 +1,40 @@
+﻿<Page x:Class="Runge_Kutta.Pages.HardThing"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Runge_Kutta.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="HardThing">
+
+    <Grid>
+        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" MinWidth="400">
+            <TextBlock Text="Решение уравнения (da)/(dx)=i(delta+abs(a)^2-1)a+i*f(x)F" TextAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Delta = "/>
+                <TextBox x:Name="Delta" MinWidth="25"/>
+                <TextBlock Text=" F = "/>
+                <TextBox x:Name="F" MinWidth="25"/>
+                <TextBlock Text=" Mu = "/>
+                <TextBox x:Name="Mu" MinWidth="25"/>
+                <TextBlock Text=" Teta = "/>
+                <TextBox x:Name="Teta" MinWidth="25"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Начальный X: " TextAlignment="Center"/>
+                <TextBox x:Name="StartX" MinWidth="25"/>
+                <TextBlock Text=" Конечный X: " TextAlignment="Center"/>
+                <TextBox x:Name="EndX" MinWidth="25"/>
+                <TextBlock Text=" Шаг: " TextAlignment="Center"/>
+                <TextBox x:Name="H" MinWidth="25"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <RadioButton Content="Метод 1" x:Name="RBF1" Checked="RBF1_Checked" IsChecked="True"/>
+                <RadioButton Content="Метод 2" x:Name="RBF2" Checked="RBF1_Checked"/>
+                <RadioButton Content="Метод 3" x:Name="RBF3" Checked="RBF1_Checked"/>
+            </StackPanel>
+            <Button x:Name="bDraw" Content="Рассчитать" Click="bDraw_Click"/>
+        </StackPanel>
+    </Grid>
+</Page>
