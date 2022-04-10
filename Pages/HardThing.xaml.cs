@@ -83,6 +83,10 @@ namespace Runge_Kutta.Pages
                 function = 3;
                 return;
             }
+            else if(RBF4.IsChecked == true)
+            {
+                function = 4;
+            }
         }
     }
 }

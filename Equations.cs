@@ -303,6 +303,9 @@ namespace Runge_Kutta
                         a[1] += buf[1];
                         ret.Add(new double[] { a[0], a[1] });
                         break;
+                    case 4:
+                        ret.Add(Function4(delta, teta, mu, F, x));
+                        break;
                 }
             }
 
@@ -334,12 +337,45 @@ namespace Runge_Kutta
         {
             double[] ret = new double[2];
 
+            //double a1 = Math.Acos(a[0]), a2 = Math.Asin(a[1]);
+
+            //double[] al = new double[2], all = new double[2];
+
+            //al[0] = -Math.Sin(a1);
+            //al[1] = Math.Cos(a2);
+
+            //all[0] = -Math.Cos(a1);
+            //all[1] = -Math.Sin(a2);
+
+            //double[] buf = new double[2];
+
+            //buf[0] = Math.Pow(al[0], 2) - Math.Pow(al[1], 2);
+            //buf[1] = 2 * al[0] * al[1];
+
+            //al[0] = buf[0];
+            //al[1] = buf[1];
+
+            //buf[0] = Math.Pow(all[0], 2) - Math.Pow(all[1], 2);
+            //buf[1] = 2 * all[0] * all[1];
+
+            //all[0] = buf[0];
+            //all[1] = buf[1];
+
             double moduleKvadr = Math.Pow(Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2)), 2);
             double f1 = a[1] * (delta + moduleKvadr - 1);
             double f2 = a[0] * (delta + moduleKvadr - 1) + FofX(x, mu, F);
 
             ret[0] = f1;
             ret[1] = f2;
+
+            return ret;
+        }
+        private static double[] Function4(double delta, double teta, double mu, double F, double x)
+        {
+            double[] ret = new double[2];
+
+            ret[0] = delta * Math.Cos(teta) - Math.Cos(teta);
+            ret[1] = delta * Math.Sin(teta) - Math.Sin(teta) + FofX(x, mu, F);
 
             return ret;
         }

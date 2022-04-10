@@ -33,6 +33,7 @@
                 <RadioButton Content="Метод 1" x:Name="RBF1" Checked="RBF1_Checked" IsChecked="True"/>
                 <RadioButton Content="Метод 2" x:Name="RBF2" Checked="RBF1_Checked"/>
                 <RadioButton Content="Метод 3" x:Name="RBF3" Checked="RBF1_Checked"/>
+                <RadioButton Content="Метод 4" x:Name="RBF4" Checked="RBF1_Checked"/>
             </StackPanel>
             <Button x:Name="bDraw" Content="Рассчитать" Click="bDraw_Click"/>
         </StackPanel>
