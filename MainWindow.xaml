@@ -15,7 +15,7 @@
             <RowDefinition Height="327*"/>
             <RowDefinition Height="107"/>
         </Grid.RowDefinitions>
-        <Canvas x:Name="MainCanvas" Grid.Row="0"/>
+        <Canvas x:Name="MainCanvas" Grid.Row="0" Margin="4px"/>
         <TextBox x:Name="TBPoints" Grid.Column="1" IsReadOnly="True"/>
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
             <Button Content="Runge-Kutta" Click="RK_Click"/>

@@ -28,42 +28,49 @@ namespace Runge_Kutta.Pages
 
         private void bDraw_Click(object sender, RoutedEventArgs e)
         {
+            List<double[]> ret = new();
+            try
+            {
+                ret = Equations.ReshenieComplex(Convert.ToDouble(Delta.Text), Convert.ToDouble(F.Text), Convert.ToDouble(Mu.Text), Convert.ToDouble(Teta.Text), Convert.ToDouble(StartX.Text), Convert.ToDouble(EndX.Text), Convert.ToDouble(H.Text), function);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Одно из чисел введено некорректно");
+            }
+            List<double[]> f1 = ConvertToLine(ret, 3, 0);
+            List<double[]> f2 = ConvertToLine(ret, 3, 1);
+            List<double[]> module = ConvertToLine(ret, 3, 2);
+
             MainWindow.mwMainCanvas.Children.Clear();
             MainWindow.mwMainTextBox.Text = "";
-            List<double[]> ret = Equations.ReshenieComplex(Convert.ToDouble(Delta.Text), Convert.ToDouble(F.Text), Convert.ToDouble(Mu.Text), Convert.ToDouble(Teta.Text), Convert.ToDouble(StartX.Text), Convert.ToDouble(EndX.Text), Convert.ToDouble(H.Text), function);
-            for (int i = 0; i < ret.Count; i++)
+
+            MainWindow.DrawPoints(f1, Convert.ToDouble(H.Text), Brushes.Red);
+            MainWindow.DrawPoints(f2, Convert.ToDouble(H.Text), Brushes.Blue);
+            MainWindow.DrawPoints(module, Convert.ToDouble(H.Text), Brushes.Black);
+
+            string str = "";
+
+            foreach(double[] d in ret)
             {
-                if (ret[i][0] >= double.MinValue && ret[i][1] <= double.MaxValue)
-                {
-                    Point p = new Point(ret[i][1] * 300, MainWindow.mwMainCanvas.ActualHeight - ret[i][0] * 300);
-                    Ellipse ell = new Ellipse();
-
-                    ell.Width = 4;
-                    ell.Height = 4;
-
-                    ell.StrokeThickness = 2;
-                    ell.Stroke = Brushes.Black;
-                    ell.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
-
-                    MainWindow.mwMainCanvas.Children.Add(ell);
-                    MainWindow.mwMainTextBox.Text += Convert.ToString(ret[i][0] + ";" + ret[i][1] + "\n");
-                    if (i != 0)
-                    {
-                        Line l = new Line();
-                        l.X1 = ret[i - 1][1] * 300;
-                        l.Y1 = MainWindow.mwMainCanvas.ActualHeight - ret[i - 1][0] * 300;
-                        l.X2 = ret[i][1] * 300;
-                        l.Y2 = MainWindow.mwMainCanvas.ActualHeight - ret[i][0] * 300;
-
-                        l.StrokeThickness = 1;
-                        l.Stroke = Brushes.Black;
-                        MainWindow.mwMainCanvas.Children.Add(l);
-                    }
-                }
+                str += Convert.ToString(Math.Round(d[0], 6) + ";" + Math.Round(d[1], 6) + ";" + Math.Round(d[2], 6) + ";" + Math.Round(d[3], 6) + "\n");
             }
-            double[] module = ret.Where(x=> x[0] >= double.MinValue && x[1] <= double.MaxValue).Last();
-            string str = "Модуль числа равен: " + Convert.ToString(Math.Sqrt(Math.Pow(module[0], 2) + Math.Pow(module[1], 2)));
-            MessageBox.Show(str);
+
+            MainWindow.mwMainTextBox.Text = str;
+        }
+
+        private List<double[]> ConvertToLine(List<double[]> input, int numberX, int numberY)
+        {
+            List<double[]> ret = new List<double[]>();
+            for(int i = 0; i<input.Count; i++)
+            {
+                if(Math.Abs(input[i][numberX]) >= double.MaxValue || Math.Abs(input[i][numberY]) >= double.MaxValue)
+                {
+                    ret.RemoveAt(i - 1);
+                    return ret; 
+                }
+                ret.Add(new double[] { input[i][numberX], input[i][numberY] });
+            }
+            return ret;
         }
 
         private void RBF1_Checked(object sender, RoutedEventArgs e)

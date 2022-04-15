@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Runge-Kutta", "Runge-Kutta.csproj", "{CCAA6EE4-B822-478B-BADA-58849B29158D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test2", "..\Test2\Test2.csproj", "{D6DC2DA4-909F-49AA-89A5-DAD98EDD1B1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{CCAA6EE4-B822-478B-BADA-58849B29158D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCAA6EE4-B822-478B-BADA-58849B29158D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCAA6EE4-B822-478B-BADA-58849B29158D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6DC2DA4-909F-49AA-89A5-DAD98EDD1B1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6DC2DA4-909F-49AA-89A5-DAD98EDD1B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6DC2DA4-909F-49AA-89A5-DAD98EDD1B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6DC2DA4-909F-49AA-89A5-DAD98EDD1B1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

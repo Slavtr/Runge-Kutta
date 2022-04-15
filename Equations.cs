@@ -24,21 +24,21 @@ namespace Runge_Kutta
         private static readonly Regex rSubtraction = new Regex(@"\-?[\d,]+\-\-?[\d,]+");
         #endregion
         #region Runge-Kutta_regular_equation
-        public static double[,] ReshenieRegular(double xStart, double xEnd, double yStart, double h, string proizv)
+        public static List<double[]> ReshenieRegular(double xStart, double xEnd, double yStart, double h, string proizv)
         {
             int length = Convert.ToInt32((xEnd - xStart) / h);
-            double[,] ret = new double[length, 2];
+            List<double[]> ret = new List<double[]>();
             double y = yStart;
             double deltay;
 
-            ret[0, 0] = Math.Round(xStart, 6);
-            ret[0, 1] = Math.Round(yStart, 6);
+            ret.Add(new double[]{ Math.Round(xStart, 6), Math.Round(yStart, 6) });
             for (int i = 1; i < length; i++)
             {
-                ret[i, 0] = Math.Round(xStart + h * i, 6);
-                deltay = DeltaY(ret[i, 0], y, h, proizv.ConvertUravn());
+                ret.Add(new double[2]);
+                ret[i][0] = Math.Round(xStart + h * i, 6);
+                deltay = DeltaY(ret[i][0], y, h, proizv.ConvertUravn());
                 y += Math.Round(deltay, 6);
-                ret[i, 1] = Math.Round(y, 6);
+                ret[i][1] = Math.Round(y, 6);
             }
 
             return ret;
@@ -284,7 +284,7 @@ namespace Runge_Kutta
             double[] a = A(teta);
             double[] buf;
 
-            double x;
+            double x, module;
 
             for (int i = 0; i<=length; i++)
             {
@@ -301,7 +301,8 @@ namespace Runge_Kutta
                         buf = DeltaY(delta, F, teta, x, h, a, mu);
                         a[0] += buf[0];
                         a[1] += buf[1];
-                        ret.Add(new double[] { a[0], a[1] });
+                        module = Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2));
+                        ret.Add(new double[] { a[0], a[1], module, x });
                         break;
                     case 4:
                         ret.Add(Function4(delta, teta, mu, F, x));
@@ -313,53 +314,33 @@ namespace Runge_Kutta
         }
         private static double[] Function(double delta, double F, double mu, double teta, double x)
         {
-            double[] f1 = F1(delta, teta), f2 = F2(delta, teta), ret = new double[2];
+            double[] f1 = F1(delta, teta), f2 = F2(delta, teta), ret = new double[4];
 
             f2[1] += FofX(x, mu, F);
 
             ret[0] = f1[0] + f2[0];
             ret[1] = f1[1] + f2[1];
+            ret[2] = Math.Sqrt(Math.Pow(ret[0],2) + Math.Pow(ret[1], 2));
+            ret[3] = x;
 
             return ret;
         }
         private static double[] Function2(double delta, double F, double mu, double teta, double x)
         {
-            double[] ret = new double[2];
+            double[] ret = new double[4];
             double st = Math.Sin(teta);
             double ct = Math.Cos(teta);
 
             ret[0] = -st * (delta + Math.Sqrt(Math.Pow(st, 2) + Math.Pow(ct, 2)) - 1);
             ret[1] = ct * (delta + Math.Sqrt(Math.Pow(st, 2) + Math.Pow(ct, 2)) - 1) + FofX(x, mu, F);
+            ret[2] = Math.Sqrt(Math.Pow(ret[0], 2) + Math.Pow(ret[1], 2));
+            ret[3] = x;
 
             return ret;
         }
         private static double[] Function3(double[] a, double x, double delta, double F, double mu)
         {
-            double[] ret = new double[2];
-
-            //double a1 = Math.Acos(a[0]), a2 = Math.Asin(a[1]);
-
-            //double[] al = new double[2], all = new double[2];
-
-            //al[0] = -Math.Sin(a1);
-            //al[1] = Math.Cos(a2);
-
-            //all[0] = -Math.Cos(a1);
-            //all[1] = -Math.Sin(a2);
-
-            //double[] buf = new double[2];
-
-            //buf[0] = Math.Pow(al[0], 2) - Math.Pow(al[1], 2);
-            //buf[1] = 2 * al[0] * al[1];
-
-            //al[0] = buf[0];
-            //al[1] = buf[1];
-
-            //buf[0] = Math.Pow(all[0], 2) - Math.Pow(all[1], 2);
-            //buf[1] = 2 * all[0] * all[1];
-
-            //all[0] = buf[0];
-            //all[1] = buf[1];
+            double[] ret = new double[4];
 
             double moduleKvadr = Math.Pow(Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2)), 2);
             double f1 = a[1] * (delta + moduleKvadr - 1);
@@ -367,15 +348,19 @@ namespace Runge_Kutta
 
             ret[0] = f1;
             ret[1] = f2;
+            ret[2] = Math.Sqrt(Math.Pow(ret[0], 2) + Math.Pow(ret[1], 2));
+            ret[3] = x;
 
             return ret;
         }
         private static double[] Function4(double delta, double teta, double mu, double F, double x)
         {
-            double[] ret = new double[2];
+            double[] ret = new double[4];
 
             ret[0] = delta * Math.Cos(teta) - Math.Cos(teta);
             ret[1] = delta * Math.Sin(teta) - Math.Sin(teta) + FofX(x, mu, F);
+            ret[2] = Math.Sqrt(Math.Pow(ret[0], 2) + Math.Pow(ret[1], 2));
+            ret[3] = x;
 
             return ret;
         }
@@ -384,7 +369,7 @@ namespace Runge_Kutta
             double[] k1 = Function3(prevA, x, delta, F, mu);
             k1[0] *= h;
             k1[1] *= h;
-            double[] buf = new double[2];
+            double[] buf = new double[4];
             buf[0] = k1[0] / 2;
             buf[1] = k1[1] / 2;
             buf[0] += prevA[0];
