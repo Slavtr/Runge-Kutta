@@ -31,7 +31,9 @@ namespace Runge_Kutta.Pages
             List<double[]> ret = new();
             try
             {
-                ret = Equations.ReshenieComplex(Convert.ToDouble(Delta.Text), Convert.ToDouble(F.Text), Convert.ToDouble(Mu.Text), Convert.ToDouble(Teta.Text), Convert.ToDouble(StartX.Text), Convert.ToDouble(EndX.Text), Convert.ToDouble(H.Text), function);
+                double x = (-Math.Sqrt(3) / 2) * Convert.ToDouble(Mu.Text);
+                double endX = x + Convert.ToDouble(H.Text) * Convert.ToDouble(CountH.Text);
+                ret = Equations.ReshenieComplex(Convert.ToDouble(Delta.Text), Convert.ToDouble(F.Text), Convert.ToDouble(Mu.Text), Convert.ToDouble(Teta.Text), x, endX, Convert.ToDouble(H.Text), function);
             }
             catch (Exception ex)
             {
@@ -43,6 +45,8 @@ namespace Runge_Kutta.Pages
 
             MainWindow.mwMainCanvas.Children.Clear();
             MainWindow.mwMainTextBox.Text = "";
+
+            MainWindow.DrawCoordinates(Convert.ToDouble(H.Text));
 
             MainWindow.DrawPoints(f1, Convert.ToDouble(H.Text), Brushes.Red);
             MainWindow.DrawPoints(f2, Convert.ToDouble(H.Text), Brushes.Blue);

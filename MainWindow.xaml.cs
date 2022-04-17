@@ -72,17 +72,13 @@ namespace Runge_Kutta
             return d;
         }
 
-        public static void DrawPoints(List<double[]> ret, double h, Brush brush)
+        public static void DrawCoordinates(double h)
         {
             double centerw = mwMainCanvas.ActualWidth / 2, centerh = mwMainCanvas.ActualHeight / 2;
-            double[] ues = UE(ret, centerw, centerh, h);
-            double uew = ues[0];
-            double ueh = ues[1];
-            double actw, acth;
             Line l = new Line();
 
             l.StrokeThickness = 0.5;
-            l.Stroke = brush;
+            l.Stroke = Brushes.Black;
 
             l.X1 = centerw;
             l.Y1 = 0;
@@ -98,8 +94,30 @@ namespace Runge_Kutta
             l.Y2 = centerh;
 
             l.StrokeThickness = 0.5;
-            l.Stroke = brush;
+            l.Stroke = Brushes.Black;
             mwMainCanvas.Children.Add(l);
+
+            Point p = new Point(centerw, centerh);
+            Ellipse ell = new Ellipse();
+
+            ell.Width = 3;
+            ell.Height = 3;
+
+            ell.StrokeThickness = 2;
+            ell.Stroke = Brushes.Black;
+            ell.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
+
+            mwMainCanvas.Children.Add(ell);
+        }
+
+        public static void DrawPoints(List<double[]> ret, double h, Brush brush)
+        {
+            double centerw = mwMainCanvas.ActualWidth / 2, centerh = mwMainCanvas.ActualHeight / 2;
+            double[] ues = UE(ret, centerw, centerh, h);
+            double uew = ues[0];
+            double ueh = ues[1];
+            double actw, acth;
+            Line l;
 
             for (int i = 0; i < ret.Count; i++)
             {

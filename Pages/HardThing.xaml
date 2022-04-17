@@ -22,10 +22,8 @@
                 <TextBox x:Name="Teta" MinWidth="25"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock Text="Начальный X: " TextAlignment="Center"/>
-                <TextBox x:Name="StartX" MinWidth="25"/>
-                <TextBlock Text=" Конечный X: " TextAlignment="Center"/>
-                <TextBox x:Name="EndX" MinWidth="25"/>
+                <TextBlock Text="Число шагов: " TextAlignment="Center"/>
+                <TextBox x:Name="CountH" MinWidth="25"/>
                 <TextBlock Text=" Шаг: " TextAlignment="Center"/>
                 <TextBox x:Name="H" MinWidth="25"/>
             </StackPanel>
