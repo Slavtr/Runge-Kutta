@@ -41,7 +41,7 @@ namespace Runge_Kutta.Pages
                 MainWindow.mwMainCanvas.Children.Clear();
                 MainWindow.mwMainTextBox.Text = "";
 
-                MainWindow.DrawCoordinates(Convert.ToDouble(H.Text));
+                MainWindow.DrawCoordinates("px");
 
                 MainWindow.DrawPoints(f1, Convert.ToDouble(H.Text), Brushes.Red);
                 MainWindow.DrawPoints(f2, Convert.ToDouble(H.Text), Brushes.Blue);

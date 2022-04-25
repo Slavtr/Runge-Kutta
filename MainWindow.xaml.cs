@@ -72,7 +72,7 @@ namespace Runge_Kutta
             return d;
         }
 
-        public static void DrawCoordinates(double h)
+        public static void DrawCoordinates(string Units)
         {
             double centerw = mwMainCanvas.ActualWidth / 2, centerh = mwMainCanvas.ActualHeight / 2;
             Line l = new Line();
@@ -97,17 +97,56 @@ namespace Runge_Kutta
             l.Stroke = Brushes.Black;
             mwMainCanvas.Children.Add(l);
 
-            Point p = new Point(centerw, centerh);
-            Ellipse ell = new Ellipse();
+            double hv = mwMainCanvas.ActualHeight / 12, wv = mwMainCanvas.ActualWidth / 12;
 
-            ell.Width = 3;
-            ell.Height = 3;
+            for (int i = 0; i <= 12; i++) 
+            {
+                Point p = new Point(i*wv, centerh);
+                Ellipse ell = new Ellipse();
 
-            ell.StrokeThickness = 2;
-            ell.Stroke = Brushes.Black;
-            ell.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
+                ell.Width = 3;
+                ell.Height = 3;
 
-            mwMainCanvas.Children.Add(ell);
+                ell.StrokeThickness = 2;
+                ell.Stroke = Brushes.Black;
+                ell.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
+
+                mwMainCanvas.Children.Add(ell);
+
+                Point p1 = new Point(centerw, i * hv);
+                Ellipse ell1 = new Ellipse();
+
+                ell1.Width = 3;
+                ell1.Height = 3;
+
+                ell1.StrokeThickness = 2;
+                ell1.Stroke = Brushes.Black;
+                ell1.Margin = new Thickness(p1.X - 2, p1.Y - 2, 0, 0);
+
+                mwMainCanvas.Children.Add(ell1);
+
+                if (i * hv > centerh) 
+                {
+                    Label lab = new Label();
+                    lab.Content = Math.Round(i * wv).ToString() + Units;
+                    lab.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
+                    mwMainCanvas.Children.Add(lab);
+                }
+                if (i * wv < centerw)
+                {
+                    Label lab = new Label();
+                    lab.Content = Math.Round(centerh - i * hv).ToString() + Units;
+                    lab.Margin = new Thickness(p1.X - 2, p1.Y - 2, 0, 0);
+                    mwMainCanvas.Children.Add(lab);
+                }
+                if(i * wv == centerw && i * hv == centerh)
+                {
+                    Label lab = new Label();
+                    lab.Content = "0" + Units;
+                    lab.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
+                    mwMainCanvas.Children.Add(lab);
+                }
+            }
         }
 
         public static void DrawPoints(List<double[]> ret, double h, Brush brush)
