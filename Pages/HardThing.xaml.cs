@@ -34,18 +34,11 @@ namespace Runge_Kutta.Pages
                 double x = (-Math.Sqrt(3) / 2) * Convert.ToDouble(Mu.Text);
                 double endX = x + Convert.ToDouble(H.Text) * Convert.ToDouble(CountH.Text);
                 ret = Equations.ReshenieComplex(Convert.ToDouble(Delta.Text), Convert.ToDouble(F.Text), Convert.ToDouble(Mu.Text), Convert.ToDouble(Teta.Text), x, endX, Convert.ToDouble(H.Text), function);
-                List<double[]> f1 = ConvertToLine(ret, 3, 0);
-                List<double[]> f2 = ConvertToLine(ret, 3, 1);
-                List<double[]> module = ConvertToLine(ret, 3, 2);
-
+                
                 MainWindow.mwMainCanvas.Children.Clear();
                 MainWindow.mwMainTextBox.Text = "";
 
-                MainWindow.DrawCoordinates("px");
-
-                MainWindow.DrawPoints(f1, Convert.ToDouble(H.Text), Brushes.Red);
-                MainWindow.DrawPoints(f2, Convert.ToDouble(H.Text), Brushes.Blue);
-                MainWindow.DrawPoints(module, Convert.ToDouble(H.Text), Brushes.Black);
+                MainWindow.DrawPoints(ret, new Brush[] { Brushes.Red, Brushes.Blue, Brushes.Black }, "у.е.", 3);
 
                 string str = "";
 
@@ -63,20 +56,6 @@ namespace Runge_Kutta.Pages
             
         }
 
-        private List<double[]> ConvertToLine(List<double[]> input, int numberX, int numberY)
-        {
-            List<double[]> ret = new List<double[]>();
-            for(int i = 0; i<input.Count; i++)
-            {
-                if(Math.Abs(input[i][numberX]) >= double.MaxValue || Math.Abs(input[i][numberY]) >= double.MaxValue)
-                {
-                    ret.RemoveAt(i - 1);
-                    return ret; 
-                }
-                ret.Add(new double[] { input[i][numberX], input[i][numberY] });
-            }
-            return ret;
-        }
 
         private void RBF1_Checked(object sender, RoutedEventArgs e)
         {

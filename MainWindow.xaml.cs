@@ -46,7 +46,7 @@ namespace Runge_Kutta
             MainFrame.Content = pages[1];
         }
 
-        private static double[] UE(List<double[]> ret, double dimention1, double dimention2, double h)
+        private static double[] UE(List<double[]> ret, double dimention1, double dimention2, int XIndex = 0)
         {
             double[] d = new double[2];
 
@@ -72,7 +72,7 @@ namespace Runge_Kutta
             return d;
         }
 
-        public static void DrawCoordinates(string Units)
+        public static void DrawCoordinates(string Units, double[] UE)
         {
             double centerw = mwMainCanvas.ActualWidth / 2, centerh = mwMainCanvas.ActualHeight / 2;
             Line l = new Line();
@@ -101,7 +101,7 @@ namespace Runge_Kutta
 
             for (int i = 0; i <= 12; i++) 
             {
-                Point p = new Point(i*wv, centerh);
+                Point p = new Point(i * wv, centerh);
                 Ellipse ell = new Ellipse();
 
                 ell.Width = 3;
@@ -125,18 +125,18 @@ namespace Runge_Kutta
 
                 mwMainCanvas.Children.Add(ell1);
 
-                if (i * hv > centerh) 
+                if (i * hv < centerh) 
                 {
                     Label lab = new Label();
-                    lab.Content = Math.Round(i * wv).ToString() + Units;
-                    lab.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
+                    lab.Content = Math.Round((centerh - i * hv) / UE[1]).ToString() + Units;
+                    lab.Margin = new Thickness(p1.X - 2, p1.Y - 2, 0, 0);
                     mwMainCanvas.Children.Add(lab);
                 }
-                if (i * wv < centerw)
+                if (i * wv > centerw)
                 {
                     Label lab = new Label();
-                    lab.Content = Math.Round(centerh - i * hv).ToString() + Units;
-                    lab.Margin = new Thickness(p1.X - 2, p1.Y - 2, 0, 0);
+                    lab.Content = Math.Round(i * wv / UE[0]).ToString() + Units;
+                    lab.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
                     mwMainCanvas.Children.Add(lab);
                 }
                 if(i * wv == centerw && i * hv == centerh)
@@ -149,27 +149,41 @@ namespace Runge_Kutta
             }
         }
 
-        public static void DrawPoints(List<double[]> ret, double h, Brush brush)
+        public static void DrawPoints(List<double[]> ret, Brush brush, string Units)
         {
             double centerw = mwMainCanvas.ActualWidth / 2, centerh = mwMainCanvas.ActualHeight / 2;
-            double[] ues = UE(ret, centerw, centerh, h);
+            double[] ues = UE(ret, centerw, centerh);
             double uew = ues[0];
             double ueh = ues[1];
+            DrawCoordinates(Units, ues);
+
+            DrawSingleLine(ret, brush, centerw, centerh, uew, ueh);
+        }
+        public static void DrawPoints(List<double[]> ret, Brush[] brush, string Units, int XIndex)
+        {
+            double centerw = mwMainCanvas.ActualWidth / 2, centerh = mwMainCanvas.ActualHeight / 2;
+            double[] ues = UE(ret, centerw, centerh);
+            double uew = ues[0];
+            double ueh = ues[1];
+            DrawCoordinates(Units, ues);
+
+            DrawMultiLine(ret, brush, centerw, centerh, uew, ueh, XIndex);
+        }
+        private static void DrawSingleLine(List<double[]> ret, Brush brush, double centerw, double centerh, double uew, double ueh)
+        {
             double actw, acth;
             Line l;
+            Point p;
+            Ellipse ell;
 
             for (int i = 0; i < ret.Count; i++)
             {
                 if (ret[i][0] >= double.MinValue && ret[i][1] <= double.MaxValue)
                 {
-                    if (i == 95)
-                    {
-                        double d = 0;
-                    }
                     actw = centerw + ret[i][0] * uew;
                     acth = centerh - ret[i][1] * ueh;
-                    Point p = new Point(actw, acth);
-                    Ellipse ell = new Ellipse();
+                    p = new Point(actw, acth);
+                    ell = new Ellipse();
 
                     ell.Width = 4;
                     ell.Height = 4;
@@ -194,6 +208,71 @@ namespace Runge_Kutta
                     }
                 }
             }
+        }
+        private static void DrawMultiLine(List<double[]> ret, Brush[] brush, double centerw, double centerh, double uew, double ueh, int XIndex)
+        {
+            List<List<double[]>> lineList = new List<List<double[]>>();
+
+            for (int i = 0; i < ret.First().Length && i != XIndex; i++) 
+            {
+                lineList.Add(ConvertToLine(ret, XIndex, i));
+            }
+
+            double actw, acth;
+            Line l;
+            Point p;
+            Ellipse ell;
+
+            foreach(List<double[]> ls in lineList)
+            {
+                for(int i = 0; i<ls.Count; i++)
+                {
+                    if (ls[i][0] >= double.MinValue && ls[i][1] <= double.MaxValue)
+                    {
+                        actw = centerw + ls[i][0] * uew;
+                        acth = centerh - ls[i][1] * ueh;
+                        p = new Point(actw, acth);
+                        ell = new Ellipse();
+
+                        ell.Width = 4;
+                        ell.Height = 4;
+
+                        ell.StrokeThickness = 2;
+                        ell.Stroke = brush[lineList.IndexOf(ls)];
+                        ell.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
+
+                        mwMainCanvas.Children.Add(ell);
+                        if (i != 0)
+                        {
+                            l = new Line();
+                            l.X1 = centerw + ls[i - 1][0] * uew;
+                            l.Y1 = centerh - ls[i - 1][1] * ueh;
+                            l.X2 = actw;
+                            l.Y2 = acth;
+
+                            l.StrokeThickness = 1;
+                            l.Stroke = brush[lineList.IndexOf(ls)];
+
+                            mwMainCanvas.Children.Add(l);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static List<double[]> ConvertToLine(List<double[]> input, int numberX, int numberY)
+        {
+            List<double[]> ret = new List<double[]>();
+            for (int i = 0; i < input.Count; i++)
+            {
+                if (Math.Abs(input[i][numberX]) >= double.MaxValue || Math.Abs(input[i][numberY]) >= double.MaxValue)
+                {
+                    ret.RemoveAt(i - 1);
+                    return ret;
+                }
+                ret.Add(new double[] { input[i][numberX], input[i][numberY] });
+            }
+            return ret;
         }
     }
 }

@@ -51,8 +51,7 @@ namespace Runge_Kutta.Pages
                 List<double[]> ret = Equations.ReshenieRegular(Convert.ToDouble(StartX.Text), Convert.ToDouble(EndX.Text), Convert.ToDouble(StartY.Text), Convert.ToDouble(H.Text), MainTextBox.Text);
                 MainWindow.mwMainCanvas.Children.Clear();
                 MainWindow.mwMainTextBox.Text = "";
-                MainWindow.DrawCoordinates("px");
-                MainWindow.DrawPoints(ret, Convert.ToDouble(H.Text), Brushes.Black);
+                MainWindow.DrawPoints(ret, Brushes.Black, "у.е.");
 
                 string str = "";
 
