@@ -57,9 +57,9 @@ namespace Runge_Kutta
 
             foreach(double[] dbl in ret)
             {
-                if(d[0] <= dbl[XIndex])
+                if(d[0] <= Math.Abs(dbl[XIndex]))
                 {
-                    d[0] = dbl[XIndex];
+                    d[0] = Math.Abs(dbl[XIndex]);
                 }
                 for (int i = 0; i < dbl.Length; i++) 
                 {
@@ -179,7 +179,7 @@ namespace Runge_Kutta
         public static void DrawPoints(List<double[]> ret, Brush[] brush, string Units, int XIndex)
         {
             double centerw = mwMainCanvas.ActualWidth / 2, centerh = mwMainCanvas.ActualHeight / 2;
-            double[] ues = UE(ret, centerw, centerh);
+            double[] ues = UE(ret, centerw, centerh, XIndex);
             double uew = ues[0];
             double ueh = ues[1];
             DrawCoordinates(Units, ues);
