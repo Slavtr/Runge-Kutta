@@ -46,28 +46,45 @@ namespace Runge_Kutta
             MainFrame.Content = pages[1];
         }
 
-        private static double[] UE(List<double[]> ret, double dimention1, double dimention2, int XIndex = 0)
+        private static double[] UE(List<double[]> ret, double dimentionw, double dimentionh, int XIndex = 0)
         {
             double[] d = new double[2];
 
-            foreach (double[] d2 in ret)
+            // Самая большая по модулю часть графика, которая не улетает в бесконечность, равна соответствующему dimention
+            // Условная единица измерения равна dimention, поделённому на самую большую по модулю часть графика, которая не улетает в бесконечность
+            // При умножении координат точки графика на условные единицы, оная должна оказаться где-то между краем экрана и соответствующей осью координат,
+            // если не улетает в бесконечность. 0 - X, 1 - Y
+
+            foreach(double[] dbl in ret)
             {
-                if (d[0] <= Math.Abs(d2[0]) && d[0] <= double.MaxValue && d[0] >= double.MinValue)
+                if(d[0] <= dbl[XIndex])
                 {
-                    d[0] = Math.Abs(d2[0]);
+                    d[0] = dbl[XIndex];
                 }
-                if (d[1] <= Math.Abs(d2[1]) && d[1] <= double.MaxValue && d[1] >= double.MinValue)
+                for (int i = 0; i < dbl.Length; i++) 
                 {
-                    d[1] = Math.Abs(d2[1]);
+                    if (i == XIndex)
+                    {
+                        continue;
+                    }
+                    if(dbl[i] <= double.MaxValue && dbl[i] >= double.MinValue)
+                    {
+                        if (Math.Abs(dbl[i]) >= d[1]) 
+                        {
+                            d[1] = Math.Abs(dbl[i]);
+                        }
+                    }
                 }
             }
 
-            d[0] = dimention1 / d[0];
-            d[1] = dimention2 / d[1];
-            if (d[1] >= double.MaxValue)
+            d[0] = dimentionw / d[0];
+
+            if (d[1] == 0)
             {
-                d[1] = dimention2;
+                d[1] = dimentionh;
             }
+
+            d[1] = dimentionh / d[1];
 
             return d;
         }
@@ -128,21 +145,21 @@ namespace Runge_Kutta
                 if (i * hv < centerh) 
                 {
                     Label lab = new Label();
-                    lab.Content = Math.Round((centerh - i * hv) / UE[1]).ToString() + Units;
+                    lab.Content = Math.Round((centerh - i * hv) / UE[1], 6).ToString() + Units;
                     lab.Margin = new Thickness(p1.X - 2, p1.Y - 2, 0, 0);
                     mwMainCanvas.Children.Add(lab);
                 }
                 if (i * wv > centerw)
                 {
                     Label lab = new Label();
-                    lab.Content = Math.Round(i * wv / UE[0]).ToString() + Units;
+                    lab.Content = Math.Round((i * wv - centerw) / UE[0], 6).ToString() + Units;
                     lab.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
                     mwMainCanvas.Children.Add(lab);
                 }
                 if(i * wv == centerw && i * hv == centerh)
                 {
                     Label lab = new Label();
-                    lab.Content = "0" + Units;
+                    lab.Content = (Math.Round((centerh - i * hv) / UE[1], 6) + Math.Round((i * wv - centerw) / UE[0], 6)).ToString() + Units;
                     lab.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
                     mwMainCanvas.Children.Add(lab);
                 }
@@ -182,6 +199,7 @@ namespace Runge_Kutta
                 {
                     actw = centerw + ret[i][0] * uew;
                     acth = centerh - ret[i][1] * ueh;
+
                     p = new Point(actw, acth);
                     ell = new Ellipse();
 
