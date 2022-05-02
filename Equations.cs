@@ -31,7 +31,7 @@ namespace Runge_Kutta
             double y = yStart;
             double deltay;
 
-            ret.Add(new double[]{ Math.Round(xStart, 6), Math.Round(yStart, 6) });
+            ret.Add(new double[] { Math.Round(xStart, 6), Math.Round(yStart, 6) });
             for (int i = 1; i < length; i++)
             {
                 ret.Add(new double[2]);
@@ -277,7 +277,7 @@ namespace Runge_Kutta
         }
         #endregion
         #region Complex_equation
-        public static List<double[]> ReshenieComplex(double delta, double F, double mu, double teta, double xStart, double xEnd, double h, int function)
+        public static List<double[]> ReshenieComplex(double delta, double F, double mu, double teta, double xStart, double xEnd, double h)
         {
             double length = Math.Round((xEnd - xStart) / h);
             List<double[]> ret = new List<double[]>();
@@ -286,55 +286,15 @@ namespace Runge_Kutta
 
             double x, module;
 
-            for (int i = 0; i<=length; i++)
+            for (int i = 0; i <= length; i++)
             {
                 x = xStart + i * h;
-                switch(function)
-                {
-                    case 1:
-                        ret.Add(Function(delta, F, mu, teta, x));
-                        break;
-                    case 2:
-                        ret.Add(Function2(delta, F, mu, teta, x));
-                        break;
-                    case 3:
-                        buf = DeltaY(delta, F, teta, x, h, a, mu);
-                        a[0] += buf[0];
-                        a[1] += buf[1];
-                        module = Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2));
-                        ret.Add(new double[] { a[0], a[1], module, x });
-                        break;
-                    case 4:
-                        ret.Add(Function4(delta, teta, mu, F, x));
-                        break;
-                }
+                buf = DeltaY(delta, F, teta, x, h, a, mu);
+                a[0] += buf[0];
+                a[1] += buf[1];
+                module = Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2));
+                ret.Add(new double[] { a[0], a[1], module, x });
             }
-
-            return ret;
-        }
-        private static double[] Function(double delta, double F, double mu, double teta, double x)
-        {
-            double[] f1 = F1(delta, teta), f2 = F2(delta, teta), ret = new double[4];
-
-            f2[1] += FofX(x, mu, F);
-
-            ret[0] = f1[0] + f2[0];
-            ret[1] = f1[1] + f2[1];
-            ret[2] = Math.Sqrt(Math.Pow(ret[0],2) + Math.Pow(ret[1], 2));
-            ret[3] = x;
-
-            return ret;
-        }
-        private static double[] Function2(double delta, double F, double mu, double teta, double x)
-        {
-            double[] ret = new double[4];
-            double st = Math.Sin(teta);
-            double ct = Math.Cos(teta);
-
-            ret[0] = -st * (delta + Math.Sqrt(Math.Pow(st, 2) + Math.Pow(ct, 2)) - 1);
-            ret[1] = ct * (delta + Math.Sqrt(Math.Pow(st, 2) + Math.Pow(ct, 2)) - 1) + FofX(x, mu, F);
-            ret[2] = Math.Sqrt(Math.Pow(ret[0], 2) + Math.Pow(ret[1], 2));
-            ret[3] = x;
 
             return ret;
         }
@@ -348,17 +308,6 @@ namespace Runge_Kutta
 
             ret[0] = f1;
             ret[1] = f2;
-            ret[2] = Math.Sqrt(Math.Pow(ret[0], 2) + Math.Pow(ret[1], 2));
-            ret[3] = x;
-
-            return ret;
-        }
-        private static double[] Function4(double delta, double teta, double mu, double F, double x)
-        {
-            double[] ret = new double[4];
-
-            ret[0] = delta * Math.Cos(teta) - Math.Cos(teta);
-            ret[1] = delta * Math.Sin(teta) - Math.Sin(teta) + FofX(x, mu, F);
             ret[2] = Math.Sqrt(Math.Pow(ret[0], 2) + Math.Pow(ret[1], 2));
             ret[3] = x;
 
@@ -397,69 +346,6 @@ namespace Runge_Kutta
 
             return buf;
         }
-        private static double[] F1(double delta, double teta)
-        {
-            double[] f1;
-            List<double[]> buf = new List<double[]>();
-            double buf1, buf2;
-
-            f1 = All(teta);
-            buf.Add(Al(teta));
-            buf1 = Math.Pow(buf[0][0], 2) + Math.Pow(buf[0][1], 2);
-            buf2 = 2 * buf[0][0] * buf[0][1];
-            buf[0][0] = buf1;
-            buf[0][1] = buf2;
-
-            buf.Add(All(teta));
-            buf1 = Math.Pow(buf[1][0], 2) + Math.Pow(buf[1][1], 2);
-            buf2 = 2 * buf[1][0] * buf[1][1];
-            buf[1][0] = buf1;
-            buf[1][1] = buf2;
-
-            buf[0][0] += buf[1][0];
-            buf[0][1] += buf[1][1];
-            buf.Remove(buf[1]);
-
-            buf[0][0] += delta - 1;
-
-            buf1 = f1[0] * buf[0][0] - f1[1] * buf[0][1];
-            buf2 = f1[0] * buf[0][1] - f1[1] * buf[0][0];
-            f1[0] = buf1;
-            f1[1] = buf2;
-
-            return f1;
-        }
-        private static double[] F2(double delta, double teta)
-        {
-            double[] f2;
-            List<double[]> buf = new List<double[]>();
-            double buf1, buf2;
-            f2 = Al(teta);
-            buf.Add(Al(teta));
-            buf1 = Math.Pow(buf[0][0], 2) + Math.Pow(buf[0][1], 2);
-            buf2 = 2 * buf[0][0] * buf[0][1];
-            buf[0][0] = buf1;
-            buf[0][1] = buf2;
-
-            buf.Add(All(teta));
-            buf1 = Math.Pow(buf[1][0], 2) + Math.Pow(buf[1][1], 2);
-            buf2 = 2 * buf[1][0] * buf[1][1];
-            buf[1][0] = buf1;
-            buf[1][1] = buf2;
-
-            buf[0][0] += buf[1][0];
-            buf[0][1] += buf[1][1];
-            buf.Remove(buf[1]);
-
-            buf[0][0] += delta - 1;
-
-            buf1 = f2[0] * buf[0][0] - f2[1] * buf[0][1];
-            buf2 = f2[0] * buf[0][1] - f2[1] * buf[0][0];
-            f2[0] = buf2;
-            f2[1] = buf1;
-
-            return f2;
-        }
         private static double FofX(this double x, double mu, double F)
         {
             return F / (Math.Exp(4 * Math.Pow(x, 2) / Math.Pow(mu, 2)));
@@ -469,20 +355,6 @@ namespace Runge_Kutta
             double[] ret = new double[2];
             ret[0] = Math.Cos(teta);
             ret[1] = Math.Sin(teta);
-            return ret;
-        }
-        private static double[] Al(double teta)
-        {
-            double[] ret = new double[2];
-            ret[0] = -Math.Sin(teta);
-            ret[1] = Math.Cos(teta);
-            return ret;
-        }
-        private static double[] All(double teta)
-        {
-            double[] ret = new double[2];
-            ret[0] = -Math.Cos(teta);
-            ret[1] = -Math.Sin(teta);
             return ret;
         }
         #endregion

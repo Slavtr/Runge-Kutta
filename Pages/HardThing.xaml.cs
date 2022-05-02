@@ -20,7 +20,6 @@ namespace Runge_Kutta.Pages
     /// </summary>
     public partial class HardThing : Page
     {
-        private int function = 1;
         public HardThing()
         {
             InitializeComponent();
@@ -33,7 +32,7 @@ namespace Runge_Kutta.Pages
             {
                 double x = (-Math.Sqrt(3) / 2) * Convert.ToDouble(Mu.Text);
                 double endX = x + Convert.ToDouble(H.Text) * Convert.ToDouble(CountH.Text);
-                ret = Equations.ReshenieComplex(Convert.ToDouble(Delta.Text), Convert.ToDouble(F.Text), Convert.ToDouble(Mu.Text), Convert.ToDouble(Teta.Text), x, endX, Convert.ToDouble(H.Text), function);
+                ret = Equations.ReshenieComplex(Convert.ToDouble(Delta.Text), Convert.ToDouble(F.Text), Convert.ToDouble(Mu.Text), Convert.ToDouble(Teta.Text), x, endX, Convert.ToDouble(H.Text));
                 
                 MainWindow.mwMainCanvas.Children.Clear();
                 MainWindow.mwMainTextBox.Text = "";
