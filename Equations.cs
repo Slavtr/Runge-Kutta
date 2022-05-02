@@ -295,7 +295,6 @@ namespace Runge_Kutta
                 module = Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2));
                 ret.Add(new double[] { a[0], a[1], module, x });
             }
-
             return ret;
         }
         private static double[] Function3(double[] a, double x, double delta, double F, double mu)

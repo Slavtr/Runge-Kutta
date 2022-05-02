@@ -30,9 +30,9 @@ namespace Runge_Kutta.Pages
             List<double[]> ret = new();
             try
             {
-                double x = (-Math.Sqrt(3) / 2) * Convert.ToDouble(Mu.Text);
-                double endX = x + Convert.ToDouble(H.Text) * Convert.ToDouble(CountH.Text);
-                ret = Equations.ReshenieComplex(Convert.ToDouble(Delta.Text), Convert.ToDouble(F.Text), Convert.ToDouble(Mu.Text), Convert.ToDouble(Teta.Text), x, endX, Convert.ToDouble(H.Text));
+                double x = (-Math.Sqrt(3) / 2) * Convert.ToDouble(Mu.Text.Replace(".", ","));
+                double endX = x + Convert.ToDouble(H.Text.Replace(".", ",")) * Convert.ToDouble(CountH.Text.Replace(".", ","));
+                ret = Equations.ReshenieComplex(Convert.ToDouble(Delta.Text.Replace(".", ",")), Convert.ToDouble(F.Text.Replace(".", ",")), Convert.ToDouble(Mu.Text.Replace(".", ",")), Convert.ToDouble(Teta.Text.Replace(".", ",")), x, endX, Convert.ToDouble(H.Text.Replace(".", ",")));
                 
                 MainWindow.mwMainCanvas.Children.Clear();
                 MainWindow.mwMainTextBox.Text = "";
@@ -53,30 +53,6 @@ namespace Runge_Kutta.Pages
                 MessageBox.Show("Одно из чисел введено некорректно");
             }
             
-        }
-
-
-        private void RBF1_Checked(object sender, RoutedEventArgs e)
-        {
-            if (RBF1.IsChecked == true)
-            {
-                function = 1;
-                return;
-            }
-            else if(RBF2.IsChecked == true)
-            {
-                function = 2;
-                return;
-            }
-            else if (RBF3.IsChecked == true)
-            {
-                function = 3;
-                return;
-            }
-            else if(RBF4.IsChecked == true)
-            {
-                function = 4;
-            }
         }
     }
 }

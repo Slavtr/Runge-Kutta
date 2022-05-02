@@ -91,6 +91,11 @@ namespace Runge_Kutta
 
         public static void DrawCoordinates(string Units, double[] UE)
         {
+            int roundNum = 6;
+            if(mwMainCanvas.ActualWidth <= 1000)
+            {
+                roundNum = 3;
+            }
             double centerw = mwMainCanvas.ActualWidth / 2, centerh = mwMainCanvas.ActualHeight / 2;
             Line l = new Line();
 
@@ -145,21 +150,21 @@ namespace Runge_Kutta
                 if (i * hv < centerh) 
                 {
                     Label lab = new Label();
-                    lab.Content = Math.Round((centerh - i * hv) / UE[1], 6).ToString() + Units;
+                    lab.Content = Math.Round((centerh - i * hv) / UE[1], roundNum).ToString() + Units;
                     lab.Margin = new Thickness(p1.X - 2, p1.Y - 2, 0, 0);
                     mwMainCanvas.Children.Add(lab);
                 }
                 if (i * wv > centerw)
                 {
                     Label lab = new Label();
-                    lab.Content = Math.Round((i * wv - centerw) / UE[0], 6).ToString() + Units;
+                    lab.Content = Math.Round((i * wv - centerw) / UE[0], roundNum).ToString() + Units;
                     lab.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
                     mwMainCanvas.Children.Add(lab);
                 }
                 if(i * wv == centerw && i * hv == centerh)
                 {
                     Label lab = new Label();
-                    lab.Content = (Math.Round((centerh - i * hv) / UE[1], 6) + Math.Round((i * wv - centerw) / UE[0], 6)).ToString() + Units;
+                    lab.Content = (Math.Round((centerh - i * hv) / UE[1], roundNum) + Math.Round((i * wv - centerw) / UE[0], roundNum)).ToString() + Units;
                     lab.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
                     mwMainCanvas.Children.Add(lab);
                 }

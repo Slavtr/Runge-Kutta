@@ -48,7 +48,7 @@ namespace Runge_Kutta.Pages
             }
             try
             {
-                List<double[]> ret = Equations.ReshenieRegular(Convert.ToDouble(StartX.Text), Convert.ToDouble(EndX.Text), Convert.ToDouble(StartY.Text), Convert.ToDouble(H.Text), MainTextBox.Text);
+                List<double[]> ret = Equations.ReshenieRegular(Convert.ToDouble(StartX.Text.Replace(".", ",")), Convert.ToDouble(EndX.Text.Replace(".", ",")), Convert.ToDouble(StartY.Text.Replace(".", ",")), Convert.ToDouble(H.Text.Replace(".", ",")), MainTextBox.Text.Replace(".", ","));
                 MainWindow.mwMainCanvas.Children.Clear();
                 MainWindow.mwMainTextBox.Text = "";
                 MainWindow.DrawPoints(ret, Brushes.Black, "у.е.");
