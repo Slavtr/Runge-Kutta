@@ -20,14 +20,18 @@ namespace Runge_Kutta.Pages
     /// </summary>
     public partial class HardThing : Page
     {
+        private static Dictionary<string, Brush> _brushes = new Dictionary<string, Brush>() { { "Red", Brushes.Red }, { "Blue", Brushes.Blue }, { "Black", Brushes.Black } };
         public HardThing()
         {
             InitializeComponent();
+            cbDeistv.ItemsSource = _brushes;
+            cbMnim.ItemsSource = _brushes;
+            cbModule.ItemsSource = _brushes;
         }
 
         private void bDraw_Click(object sender, RoutedEventArgs e)
         {
-            List<double[]> ret = new();
+            List<double[]> ret;
             try
             {
                 double x = (-Math.Sqrt(3) / 2) * Convert.ToDouble(Mu.Text.Replace(".", ","));
@@ -37,7 +41,7 @@ namespace Runge_Kutta.Pages
                 MainWindow.mwMainCanvas.Children.Clear();
                 MainWindow.mwMainTextBox.Text = "";
 
-                MainWindow.DrawPoints(ret, new Brush[] { Brushes.Red, Brushes.Blue, Brushes.Black }, "у.е.", 3);
+                MainWindow.DrawPoints(ret, new Brush[] {((KeyValuePair<string, Brush>)cbDeistv.SelectedItem).Value, ((KeyValuePair<string, Brush>)cbMnim.SelectedItem).Value, ((KeyValuePair<string, Brush>)cbModule.SelectedItem).Value }, "у.е.", 3);
 
                 string str = "";
 

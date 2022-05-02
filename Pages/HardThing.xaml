@@ -9,26 +9,43 @@
       Title="HardThing">
 
     <Grid>
-        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" MinWidth="400">
-            <TextBlock Text="Решение уравнения (da)/(dx)=i(delta+abs(a)^2-1)a+i*f(x)F" TextAlignment="Center" Margin="1px"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="1px">
-                <TextBlock Text="Delta = "/>
-                <TextBox x:Name="Delta" MinWidth="25"/>
-                <TextBlock Text=" F = "/>
-                <TextBox x:Name="F" MinWidth="25"/>
-                <TextBlock Text=" Mu = "/>
-                <TextBox x:Name="Mu" MinWidth="25"/>
-                <TextBlock Text=" Teta = "/>
-                <TextBox x:Name="Teta" MinWidth="25"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="4,0,4,0">
+                <TextBlock Text="Цвета графиков:" TextAlignment="Center" Margin="1px"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="1px">
+                    <TextBlock Text="Действительная часть числа "/>
+                    <ComboBox x:Name="cbDeistv" DisplayMemberPath="Key"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="1px">
+                    <TextBlock Text=" Мнимая часть числа "/>
+                    <ComboBox x:Name="cbMnim" DisplayMemberPath="Key"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="1px">
+                    <TextBlock Text="Модуль "/>
+                    <ComboBox x:Name="cbModule" DisplayMemberPath="Key"/>
+                </StackPanel>
             </StackPanel>
-            <TextBlock Text="Стартовый Х равен -sqrt(3)/2Mu." Margin="4px" HorizontalAlignment="Center"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="1px">
-                <TextBlock Text="Число шагов: " TextAlignment="Center"/>
-                <TextBox x:Name="CountH" MinWidth="25"/>
-                <TextBlock Text=" Шаг: " TextAlignment="Center"/>
-                <TextBox x:Name="H" MinWidth="25"/>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="4,0,4,0">
+                <TextBlock Text="Решение уравнения (da)/(dx)=i(delta+abs(a)^2-1)a+i*f(x)F" TextAlignment="Center" Margin="1px"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="1px">
+                    <TextBlock Text="Delta = "/>
+                    <TextBox x:Name="Delta" MinWidth="25"/>
+                    <TextBlock Text=" F = "/>
+                    <TextBox x:Name="F" MinWidth="25"/>
+                    <TextBlock Text=" Mu = "/>
+                    <TextBox x:Name="Mu" MinWidth="25"/>
+                    <TextBlock Text=" Teta = "/>
+                    <TextBox x:Name="Teta" MinWidth="25"/>
+                </StackPanel>
+                <TextBlock Text="Стартовый Х равен -sqrt(3)/2Mu." Margin="4px" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="1px">
+                    <TextBlock Text="Число шагов: " TextAlignment="Center"/>
+                    <TextBox x:Name="CountH" MinWidth="25"/>
+                    <TextBlock Text=" Шаг: " TextAlignment="Center"/>
+                    <TextBox x:Name="H" MinWidth="25"/>
+                </StackPanel>
+                <Button x:Name="bDraw" Content="Рассчитать" Click="bDraw_Click" Margin="1px" IsDefault="True"/>
             </StackPanel>
-            <Button x:Name="bDraw" Content="Рассчитать" Click="bDraw_Click" Margin="1px" IsDefault="True"/>
         </StackPanel>
     </Grid>
 </Page>
