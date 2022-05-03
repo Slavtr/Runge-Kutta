@@ -17,7 +17,7 @@
                     <ComboBox x:Name="cbDeistv" DisplayMemberPath="Key"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="1px">
-                    <TextBlock Text=" Мнимая часть числа "/>
+                    <TextBlock Text="Мнимая часть числа "/>
                     <ComboBox x:Name="cbMnim" DisplayMemberPath="Key"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="1px">

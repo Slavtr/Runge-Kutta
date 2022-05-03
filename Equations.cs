@@ -299,7 +299,7 @@ namespace Runge_Kutta
         }
         private static double[] Function3(double[] a, double x, double delta, double F, double mu)
         {
-            double[] ret = new double[4];
+            double[] ret = new double[2];
 
             double moduleKvadr = Math.Pow(Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2)), 2);
             double f1 = a[1] * (delta + moduleKvadr - 1);
@@ -307,8 +307,6 @@ namespace Runge_Kutta
 
             ret[0] = f1;
             ret[1] = f2;
-            ret[2] = Math.Sqrt(Math.Pow(ret[0], 2) + Math.Pow(ret[1], 2));
-            ret[3] = x;
 
             return ret;
         }
