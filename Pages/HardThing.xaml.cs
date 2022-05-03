@@ -35,7 +35,7 @@ namespace Runge_Kutta.Pages
             try
             {
                 double x = (-Math.Sqrt(3) / 2) * Convert.ToDouble(Mu.Text.Replace(".", ","));
-                double endX = x + Convert.ToDouble(H.Text.Replace(".", ",")) * Convert.ToDouble(CountH.Text.Replace(".", ","));
+                double endX = -x /*+ Convert.ToDouble(H.Text.Replace(".", ",")) * Convert.ToDouble(CountH.Text.Replace(".", ","))*/;
                 ret = Equations.ReshenieComplex(Convert.ToDouble(Delta.Text.Replace(".", ",")), Convert.ToDouble(F.Text.Replace(".", ",")), Convert.ToDouble(Mu.Text.Replace(".", ",")), Convert.ToDouble(Teta.Text.Replace(".", ",")), x, endX, Convert.ToDouble(H.Text.Replace(".", ",")));
                 
                 MainWindow.mwMainCanvas.Children.Clear();

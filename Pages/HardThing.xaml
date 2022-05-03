@@ -37,10 +37,10 @@
                     <TextBlock Text=" Teta = "/>
                     <TextBox x:Name="Teta" MinWidth="25"/>
                 </StackPanel>
-                <TextBlock Text="Стартовый Х равен -sqrt(3)/2Mu." Margin="4px" HorizontalAlignment="Center"/>
+                <TextBlock Text="Х определяется от -sqrt(3)/2Mu до sqrt(3)/2Mu" Margin="4px" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="1px">
-                    <TextBlock Text="Число шагов: " TextAlignment="Center"/>
-                    <TextBox x:Name="CountH" MinWidth="25"/>
+                    <!--<TextBlock Text="Число шагов: " TextAlignment="Center"/>
+                    <TextBox x:Name="CountH" MinWidth="25"/>-->
                     <TextBlock Text=" Шаг: " TextAlignment="Center"/>
                     <TextBox x:Name="H" MinWidth="25"/>
                 </StackPanel>
