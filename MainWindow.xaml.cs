@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Runge_Kutta.Windows;
 
 namespace Runge_Kutta
 {
@@ -24,6 +25,7 @@ namespace Runge_Kutta
         public static TextBox mwMainTextBox;
         public static Frame mwMainFrame;
         private static List<Page> pages;
+        private static Help help;
         public MainWindow()
         {
             InitializeComponent();
@@ -34,16 +36,33 @@ namespace Runge_Kutta
             pages.Add(new Pages.Runge_Kutta());
             pages.Add(new Pages.HardThing());
             MainFrame.Content = pages[0];
+            this.Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (help != null)
+            {
+                help.Close();
+            }
         }
 
         private void RK_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Content = pages[0];
+            if (help != null)
+            {
+                help.Close();
+            }
         }
 
         private void Hard_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Content = pages[1];
+            if (help != null)
+            {
+                help.Close();
+            }
         }
 
         private static double[] UE(List<double[]> ret, double dimentionw, double dimentionh, int XIndex = 0)
@@ -69,7 +88,7 @@ namespace Runge_Kutta
                     }
                     if(dbl[i] <= double.MaxValue && dbl[i] >= double.MinValue)
                     {
-                        if (Math.Abs(dbl[i]) >= d[1]) 
+                        if (Math.Abs(dbl[i]) >= d[1])  
                         {
                             d[1] = Math.Abs(dbl[i]);
                         }
@@ -296,6 +315,28 @@ namespace Runge_Kutta
                 ret.Add(new double[] { input[i][numberX], input[i][numberY] });
             }
             return ret;
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if(MainFrame.Content == pages[0])
+            {
+                if (help != null)
+                {
+                    help.Close();
+                }
+                help = new Help(0);
+                help.Show();
+            }
+            else
+            {
+                if (help != null)
+                {
+                    help.Close();
+                }
+                help = new Help(1);
+                help.Show();
+            }
         }
     }
 }

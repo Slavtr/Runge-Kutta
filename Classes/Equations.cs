@@ -293,20 +293,22 @@ namespace Runge_Kutta
                 a[0] += buf[0];
                 a[1] += buf[1];
                 module = Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2));
-                ret.Add(new double[] { a[0], a[1], module, x });
+                ret.Add(new double[] { a[0], a[1], module, buf[2], buf[3], x });
             }
             return ret;
         }
         private static double[] Function3(double[] a, double x, double delta, double F, double mu)
         {
-            double[] ret = new double[2];
+            double[] ret = new double[4];
 
             double moduleKvadr = Math.Pow(Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2)), 2);
-            double f1 = a[1] * (delta + moduleKvadr - 1);
-            double f2 = a[0] * (delta + moduleKvadr - 1) + FofX(x, mu, F);
+            ret[2] = delta + moduleKvadr - 1;
+            double f1 = -(a[1] * ret[2]);
+            double f2 = a[0] * ret[2] + FofX(x, mu, F);
 
             ret[0] = f1;
             ret[1] = f2;
+            ret[3] = FofX(x, mu, F);
 
             return ret;
         }
@@ -340,6 +342,8 @@ namespace Runge_Kutta
 
             buf[0] = (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]) / 6;
             buf[1] = (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1]) / 6;
+            buf[2] = (k1[2] + 2 * k2[2] + 2 * k3[2] + k4[2]) / 6;
+            buf[3] = (k1[3] + 2 * k2[3] + 2 * k3[3] + k4[3]) / 6;
 
             return buf;
         }

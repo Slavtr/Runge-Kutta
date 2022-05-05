@@ -57,7 +57,7 @@ namespace Runge_Kutta.Pages
 
                 foreach (double[] d in ret)
                 {
-                    str += Convert.ToString(Math.Round(d[0], 6) + ";" + Math.Round(d[1], 6) + "\n");
+                    str += Convert.ToString(Math.Round(d[0], 6) + "; " + Math.Round(d[1], 6) + "\n");
                 }
 
                 MainWindow.mwMainTextBox.Text = str;

@@ -35,19 +35,19 @@ namespace Runge_Kutta.Pages
             try
             {
                 double x = (-Math.Sqrt(3) / 2) * Convert.ToDouble(Mu.Text.Replace(".", ","));
-                double endX = -x /*+ Convert.ToDouble(H.Text.Replace(".", ",")) * Convert.ToDouble(CountH.Text.Replace(".", ","))*/;
+                double endX = -x;
                 ret = Equations.ReshenieComplex(Convert.ToDouble(Delta.Text.Replace(".", ",")), Convert.ToDouble(F.Text.Replace(".", ",")), Convert.ToDouble(Mu.Text.Replace(".", ",")), Convert.ToDouble(Teta.Text.Replace(".", ",")), x, endX, Convert.ToDouble(H.Text.Replace(".", ",")));
                 
                 MainWindow.mwMainCanvas.Children.Clear();
                 MainWindow.mwMainTextBox.Text = "";
 
-                MainWindow.DrawPoints(ret, new Brush[] {((KeyValuePair<string, Brush>)cbDeistv.SelectedItem).Value, ((KeyValuePair<string, Brush>)cbMnim.SelectedItem).Value, ((KeyValuePair<string, Brush>)cbModule.SelectedItem).Value }, "у.е.", 3);
+                MainWindow.DrawPoints(ret, new Brush[] {((KeyValuePair<string, Brush>)cbDeistv.SelectedItem).Value, ((KeyValuePair<string, Brush>)cbMnim.SelectedItem).Value, ((KeyValuePair<string, Brush>)cbModule.SelectedItem).Value, Brushes.Yellow, Brushes.Green }, "у.е.", 5);
 
                 string str = "";
 
                 foreach (double[] d in ret)
                 {
-                    str += Convert.ToString(Math.Round(d[0], 6) + "; " + Math.Round(d[1], 6) + "; " + Math.Round(d[2], 6) + "; " + Math.Round(d[3], 6) + "\n");
+                    str += Convert.ToString(Math.Round(d[0], 6) + "; " + Math.Round(d[1], 6) + "; " + Math.Round(d[2], 6) + "; " + Math.Round(d[3], 6) + "; " + Math.Round(d[4], 6) + "; " + Math.Round(d[5], 6) + "\n");
                 }
 
                 MainWindow.mwMainTextBox.Text = str;

@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:Runge_Kutta.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+      d:MinHeight="450" d:MinWidth="800"
       Title="HardThing">
 
     <Grid>
@@ -34,13 +35,11 @@
                     <TextBox x:Name="F" MinWidth="25"/>
                     <TextBlock Text=" Mu = "/>
                     <TextBox x:Name="Mu" MinWidth="25"/>
-                    <TextBlock Text=" Teta = "/>
+                    <TextBlock Text=" Teta (рад) = "/>
                     <TextBox x:Name="Teta" MinWidth="25"/>
                 </StackPanel>
-                <TextBlock Text="Х определяется от -sqrt(3)/2Mu до sqrt(3)/2Mu" Margin="4px" HorizontalAlignment="Center"/>
+                <TextBlock Text="Х определяется от -sqrt(3)Mu/2 до sqrt(3)Mu/2" Margin="4px" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="1px">
-                    <!--<TextBlock Text="Число шагов: " TextAlignment="Center"/>
-                    <TextBox x:Name="CountH" MinWidth="25"/>-->
                     <TextBlock Text=" Шаг: " TextAlignment="Center"/>
                     <TextBox x:Name="H" MinWidth="25"/>
                 </StackPanel>
