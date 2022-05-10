@@ -65,6 +65,40 @@ namespace Runge_Kutta
             }
         }
 
+        private void Help_Click(object sender, RoutedEventArgs e)
+        {
+            if (MainFrame.Content == pages[0])
+            {
+                if (help != null)
+                {
+                    help.Close();
+                }
+                help = new Help(0);
+                help.Owner = this;
+                help.Show();
+            }
+            else
+            {
+                if (help != null)
+                {
+                    help.Close();
+                }
+                help = new Help(1);
+                help.Owner = this;
+                help.Show();
+            }
+        }
+
+        private void CrossCPD_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeltaGraph_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private static double[] UE(List<double[]> ret, double dimentionw, double dimentionh, int XIndex = 0)
         {
             double[] d = new double[2];
@@ -317,26 +351,5 @@ namespace Runge_Kutta
             return ret;
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            if(MainFrame.Content == pages[0])
-            {
-                if (help != null)
-                {
-                    help.Close();
-                }
-                help = new Help(0);
-                help.Show();
-            }
-            else
-            {
-                if (help != null)
-                {
-                    help.Close();
-                }
-                help = new Help(1);
-                help.Show();
-            }
-        }
     }
 }

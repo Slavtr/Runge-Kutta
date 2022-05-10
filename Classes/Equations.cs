@@ -276,9 +276,11 @@ namespace Runge_Kutta
             return input;
         }
         #endregion
-        #region Complex_equation
-        public static List<double[]> ReshenieComplex(double delta, double F, double mu, double teta, double xStart, double xEnd, double h)
+        #region Module_a
+        public static List<double[]> ReshenieComplex(double delta, double F, double mu, double teta, double h)
         {
+            double xStart = (-Math.Sqrt(3) / 2) * mu;
+            double xEnd = -xStart;
             double length = Math.Round((xEnd - xStart) / h);
             List<double[]> ret = new List<double[]>();
             double[] a = A(teta);
@@ -293,7 +295,7 @@ namespace Runge_Kutta
                 a[0] += buf[0];
                 a[1] += buf[1];
                 module = Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2));
-                ret.Add(new double[] { a[0], a[1], module, buf[2], buf[3], x });
+                ret.Add(new double[] { a[0], a[1], module, x });
             }
             return ret;
         }
@@ -302,13 +304,11 @@ namespace Runge_Kutta
             double[] ret = new double[4];
 
             double moduleKvadr = Math.Pow(Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2)), 2);
-            ret[2] = delta + moduleKvadr - 1;
-            double f1 = -(a[1] * ret[2]);
-            double f2 = a[0] * ret[2] + FofX(x, mu, F);
+            double f1 = -(a[1] * (delta + moduleKvadr - 1));
+            double f2 = a[0] * (delta + moduleKvadr - 1) + FofX(x, mu, F);
 
             ret[0] = f1;
             ret[1] = f2;
-            ret[3] = FofX(x, mu, F);
 
             return ret;
         }
@@ -342,8 +342,6 @@ namespace Runge_Kutta
 
             buf[0] = (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]) / 6;
             buf[1] = (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1]) / 6;
-            buf[2] = (k1[2] + 2 * k2[2] + 2 * k3[2] + k4[2]) / 6;
-            buf[3] = (k1[3] + 2 * k2[3] + 2 * k3[3] + k4[3]) / 6;
 
             return buf;
         }
@@ -357,6 +355,57 @@ namespace Runge_Kutta
             ret[0] = Math.Cos(teta);
             ret[1] = Math.Sin(teta);
             return ret;
+        }
+        #endregion
+        #region Cross_CPD
+        public static double CrossCPD(double delta, double F, double mu, double h)
+        {
+            double TPi = Math.PI * 2;
+            double teta = TPi / 32;
+            double xStart = (-Math.Sqrt(3) / 2) * mu;
+            double xEnd = -xStart;
+            double length = Math.Round((xEnd - xStart) / h);
+            double[] a = A(teta);
+            double[] buf;
+
+            double x, module = 0, crossCPD = 0;
+
+            for (int j = 1; j <= 32; j++)
+            {
+                for (int i = 0; i <= length; i++)
+                {
+                    x = xStart + i * h;
+                    buf = DeltaY(delta, F, teta * j, x, h, a, mu);
+                    a[0] += buf[0];
+                    a[1] += buf[1];
+                    module = Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2));
+                }
+                crossCPD += Math.Pow(module, 2);
+            }
+
+            crossCPD = 1 - crossCPD / 32;
+
+            return crossCPD;
+        }
+        #endregion
+        #region DeltaGraph
+        public static List<double[]> DeltaCPDGraph(double deltaStart, double deltaEnd, double deltaH, double F, double mu, double h)
+        {
+            List<double[]> result = new List<double[]>();
+            double length = Math.Round((deltaStart - deltaEnd) / deltaH);
+
+            double delta, crossCPD;
+
+            for(int i = 0; i < length; i++)
+            {
+                delta = deltaStart + i * deltaH;
+
+                crossCPD = CrossCPD(delta, F, mu, h);
+
+                result.Add(new double[] { delta, crossCPD });
+            }
+
+            return result;
         }
         #endregion
     }
