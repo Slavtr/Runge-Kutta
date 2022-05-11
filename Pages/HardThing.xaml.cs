@@ -34,7 +34,6 @@ namespace Runge_Kutta.Pages
             List<double[]> ret;
             try
             {
-                
                 ret = Equations.ReshenieComplex(Convert.ToDouble(Delta.Text.Replace(".", ",")), Convert.ToDouble(F.Text.Replace(".", ",")), Convert.ToDouble(Mu.Text.Replace(".", ",")), Convert.ToDouble(Teta.Text.Replace(".", ",")), Convert.ToDouble(H.Text.Replace(".", ",")));
                 
                 MainWindow.mwMainCanvas.Children.Clear();
@@ -50,10 +49,13 @@ namespace Runge_Kutta.Pages
                 }
 
                 MainWindow.mwMainTextBox.Text = str;
+
+                MainWindow.DrawCrossCPD(Convert.ToDouble(Delta.Text.Replace(".", ",")), Convert.ToDouble(F.Text.Replace(".", ",")), Convert.ToDouble(Mu.Text.Replace(".", ",")), Convert.ToDouble(H.Text.Replace(".", ",")));
+                MainWindow.DrawDeltaGraph(Convert.ToDouble(F.Text.Replace(".", ",")), Convert.ToDouble(Mu.Text.Replace(".", ",")), Convert.ToDouble(H.Text.Replace(".", ",")));
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Одно из чисел введено некорректно");
+                MessageBox.Show("Одно из чисел в главном окне введено некорректно");
             }
             
         }

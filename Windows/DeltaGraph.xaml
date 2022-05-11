@@ -5,8 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Runge_Kutta.Windows"
         mc:Ignorable="d"
-        Title="DeltaGraph" Height="450" Width="800">
+        Title="КПД по Дельта" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="131*"/>
+            <ColumnDefinition Width="29*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="107"/>
+        </Grid.RowDefinitions>
+        <Canvas x:Name="MainCanvas"/>
+        <TextBox x:Name="TBPoints" Grid.Column="1" IsReadOnly="True" VerticalScrollBarVisibility="Auto" Grid.RowSpan="2"/>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="1" HorizontalAlignment="Center">
+            <TextBlock Text="Начальная Delta: "/>
+            <TextBox x:Name="DeltaStart" MinWidth="25" Margin="4,0,4,0" />
+            <TextBlock Text="Конечная Delta: "/>
+            <TextBox x:Name="DeltaEnd" MinWidth="25" Margin="4,0,4,0" />
+            <TextBlock Text="Шаг: "/>
+            <TextBox x:Name="H" MinWidth="25" Margin="4,0,4,0" />
+        </StackPanel>
     </Grid>
 </Window>

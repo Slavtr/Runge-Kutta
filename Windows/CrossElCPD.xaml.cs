@@ -17,15 +17,22 @@ namespace Runge_Kutta.Windows
     /// <summary>
     /// Логика взаимодействия для PoperElCPD.xaml
     /// </summary>
-    public partial class PoperElCPD : Window
+    public partial class CrossElCPD : Window
     {
-        public PoperElCPD()
+        public CrossElCPD()
         {
             InitializeComponent();
         }
-        public static void DrawN()
+        public string DrawN
         {
-
+            set
+            {
+                tbCrossCPD.Text = value;
+            }
+            get
+            {
+                return tbCrossCPD.Text;
+            }
         }
     }
 }

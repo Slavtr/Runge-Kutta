@@ -24,32 +24,25 @@ namespace Runge_Kutta
         public static Canvas mwMainCanvas;
         public static TextBox mwMainTextBox;
         public static Frame mwMainFrame;
-        private static List<Page> pages;
+        private static Pages.Runge_Kutta runge_Kutta;
+        private static Pages.HardThing hard_Thing;
         private static Help help;
+        private static CrossElCPD crossElCPD;
+        private static DeltaGraph deltaGraph;
         public MainWindow()
         {
             InitializeComponent();
             mwMainCanvas = MainCanvas;
             mwMainTextBox = TBPoints;
             mwMainFrame = MainFrame;
-            pages = new List<Page>();
-            pages.Add(new Pages.Runge_Kutta());
-            pages.Add(new Pages.HardThing());
-            MainFrame.Content = pages[0];
-            this.Closing += MainWindow_Closing;
-        }
-
-        private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (help != null)
-            {
-                help.Close();
-            }
+            runge_Kutta = new Pages.Runge_Kutta();
+            hard_Thing = new Pages.HardThing();
+            MainFrame.Content = runge_Kutta;
         }
 
         private void RK_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Content = pages[0];
+            MainFrame.Content = runge_Kutta;
             if (help != null)
             {
                 help.Close();
@@ -58,45 +51,61 @@ namespace Runge_Kutta
 
         private void Hard_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Content = pages[1];
+            MainFrame.Content = hard_Thing;
             if (help != null)
             {
                 help.Close();
             }
         }
 
-        private void Help_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (MainFrame.Content == pages[0])
+            switch ((sender as MenuItem).Name)
             {
-                if (help != null)
-                {
-                    help.Close();
-                }
-                help = new Help(0);
-                help.Owner = this;
-                help.Show();
+                case "chCEC":
+                    if (crossElCPD != null && crossElCPD.IsVisible)
+                    {
+                        crossElCPD.Close();
+                    }
+                    else
+                    {
+                        crossElCPD = new CrossElCPD();
+                        crossElCPD.Owner = this;
+                        crossElCPD.Show();
+                    }
+                    break;
+                case "chDC":
+                    if (deltaGraph != null && deltaGraph.IsVisible)
+                    {
+                        deltaGraph.Close();
+                    }
+                    else
+                    {
+                        deltaGraph = new DeltaGraph();
+                        deltaGraph.Owner = this;
+                        deltaGraph.Show();
+                    }
+                    break;
+                case "miHelp":
+                    if (help != null && help.IsVisible)
+                    {
+                        help.Close();
+                    }
+                    else
+                    {
+                        if (MainFrame.Content == runge_Kutta)
+                        {
+                            help = new Help(0);
+                        }
+                        else
+                        {
+                            help = new Help(1);
+                        }
+                        help.Owner = this;
+                        help.Show();
+                    }
+                    break;
             }
-            else
-            {
-                if (help != null)
-                {
-                    help.Close();
-                }
-                help = new Help(1);
-                help.Owner = this;
-                help.Show();
-            }
-        }
-
-        private void CrossCPD_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DeltaGraph_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private static double[] UE(List<double[]> ret, double dimentionw, double dimentionh, int XIndex = 0)
@@ -108,21 +117,21 @@ namespace Runge_Kutta
             // При умножении координат точки графика на условные единицы, оная должна оказаться где-то между краем экрана и соответствующей осью координат,
             // если не улетает в бесконечность. 0 - X, 1 - Y
 
-            foreach(double[] dbl in ret)
+            foreach (double[] dbl in ret)
             {
-                if(d[0] <= Math.Abs(dbl[XIndex]))
+                if (d[0] <= Math.Abs(dbl[XIndex]))
                 {
                     d[0] = Math.Abs(dbl[XIndex]);
                 }
-                for (int i = 0; i < dbl.Length; i++) 
+                for (int i = 0; i < dbl.Length; i++)
                 {
                     if (i == XIndex)
                     {
                         continue;
                     }
-                    if(dbl[i] <= double.MaxValue && dbl[i] >= double.MinValue)
+                    if (dbl[i] <= double.MaxValue && dbl[i] >= double.MinValue)
                     {
-                        if (Math.Abs(dbl[i]) >= d[1])  
+                        if (Math.Abs(dbl[i]) >= d[1])
                         {
                             d[1] = Math.Abs(dbl[i]);
                         }
@@ -145,7 +154,7 @@ namespace Runge_Kutta
         public static void DrawCoordinates(string Units, double[] UE)
         {
             int roundNum = 6;
-            if(mwMainCanvas.ActualWidth <= 1000)
+            if (mwMainCanvas.ActualWidth <= 1000)
             {
                 roundNum = 3;
             }
@@ -174,7 +183,7 @@ namespace Runge_Kutta
 
             double hv = mwMainCanvas.ActualHeight / 12, wv = mwMainCanvas.ActualWidth / 12;
 
-            for (int i = 0; i <= 12; i++) 
+            for (int i = 0; i <= 12; i++)
             {
                 Point p = new Point(i * wv, centerh);
                 Ellipse ell = new Ellipse();
@@ -200,7 +209,7 @@ namespace Runge_Kutta
 
                 mwMainCanvas.Children.Add(ell1);
 
-                if (i * hv < centerh) 
+                if (i * hv < centerh)
                 {
                     Label lab = new Label();
                     lab.Content = Math.Round((centerh - i * hv) / UE[1], roundNum).ToString() + Units;
@@ -214,7 +223,7 @@ namespace Runge_Kutta
                     lab.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
                     mwMainCanvas.Children.Add(lab);
                 }
-                if(i * wv == centerw && i * hv == centerh)
+                if (i * wv == centerw && i * hv == centerh)
                 {
                     Label lab = new Label();
                     lab.Content = (Math.Round((centerh - i * hv) / UE[1], roundNum) + Math.Round((i * wv - centerw) / UE[0], roundNum)).ToString() + Units;
@@ -243,6 +252,20 @@ namespace Runge_Kutta
             DrawCoordinates(Units, ues);
 
             DrawMultiLine(ret, brush, centerw, centerh, uew, ueh, XIndex);
+        }
+        public static void DrawCrossCPD(double delta, double F, double mu, double h)
+        {
+            if(crossElCPD != null && crossElCPD.IsVisible == true)
+            {
+                crossElCPD.DrawN = Convert.ToString(Math.Round(Equations.CrossCPD(delta, F, mu, h), 6));
+            }
+        }
+        public static void DrawDeltaGraph(double F, double mu, double h)
+        {
+            if (deltaGraph != null && deltaGraph.IsVisible == true) 
+            {
+                deltaGraph.DrawDelta(F, mu, h);
+            }
         }
         private static void DrawSingleLine(List<double[]> ret, Brush brush, double centerw, double centerh, double uew, double ueh)
         {
@@ -289,7 +312,7 @@ namespace Runge_Kutta
         {
             List<List<double[]>> lineList = new List<List<double[]>>();
 
-            for (int i = 0; i < ret.First().Length && i != XIndex; i++) 
+            for (int i = 0; i < ret.First().Length && i != XIndex; i++)
             {
                 lineList.Add(ConvertToLine(ret, XIndex, i));
             }
@@ -299,9 +322,9 @@ namespace Runge_Kutta
             Point p;
             Ellipse ell;
 
-            foreach(List<double[]> ls in lineList)
+            foreach (List<double[]> ls in lineList)
             {
-                for(int i = 0; i<ls.Count; i++)
+                for (int i = 0; i < ls.Count; i++)
                 {
                     if (ls[i][0] >= double.MinValue && ls[i][1] <= double.MaxValue)
                     {

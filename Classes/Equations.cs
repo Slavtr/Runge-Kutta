@@ -370,7 +370,7 @@ namespace Runge_Kutta
 
             double x, module = 0, crossCPD = 0;
 
-            for (int j = 1; j <= 32; j++)
+            for (int j = 0; j < 32; j++)
             {
                 for (int i = 0; i <= length; i++)
                 {
@@ -383,7 +383,7 @@ namespace Runge_Kutta
                 crossCPD += Math.Pow(module, 2);
             }
 
-            crossCPD = 1 - crossCPD / 32;
+            crossCPD = 1 - crossCPD / TPi;
 
             return crossCPD;
         }
@@ -392,7 +392,7 @@ namespace Runge_Kutta
         public static List<double[]> DeltaCPDGraph(double deltaStart, double deltaEnd, double deltaH, double F, double mu, double h)
         {
             List<double[]> result = new List<double[]>();
-            double length = Math.Round((deltaStart - deltaEnd) / deltaH);
+            double length = Math.Round(Math.Abs(deltaStart - deltaEnd) / deltaH);
 
             double delta, crossCPD;
 
