@@ -291,7 +291,7 @@ namespace Runge_Kutta
             for (int i = 0; i <= length; i++)
             {
                 x = xStart + i * h;
-                buf = DeltaY(delta, F, teta, x, h, a, mu);
+                buf = DeltaY(delta, F, x, h, a, mu);
                 a[0] += buf[0];
                 a[1] += buf[1];
                 module = Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2));
@@ -312,7 +312,7 @@ namespace Runge_Kutta
 
             return ret;
         }
-        private static double[] DeltaY(double delta, double F, double teta, double x, double h, double[] prevA, double mu)
+        private static double[] DeltaY(double delta, double F, double x, double h, double[] prevA, double mu)
         {
             double[] k1 = Function3(prevA, x, delta, F, mu);
             k1[0] *= h;
@@ -375,7 +375,7 @@ namespace Runge_Kutta
                 for (int i = 0; i <= length; i++)
                 {
                     x = xStart + i * h;
-                    buf = DeltaY(delta, F, teta * j, x, h, a, mu);
+                    buf = DeltaY(delta, F, x, h, a, mu);
                     a[0] += buf[0];
                     a[1] += buf[1];
                     module = Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2));
