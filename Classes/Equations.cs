@@ -301,7 +301,7 @@ namespace Runge_Kutta
         }
         private static double[] Function3(double[] a, double x, double delta, double F, double mu)
         {
-            double[] ret = new double[4];
+            double[] ret = new double[2];
 
             double moduleKvadr = Math.Pow(Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2)), 2);
             double f1 = -(a[1] * (delta + moduleKvadr - 1));
@@ -365,13 +365,13 @@ namespace Runge_Kutta
             double xStart = (-Math.Sqrt(3) / 2) * mu;
             double xEnd = -xStart;
             double length = Math.Round((xEnd - xStart) / h);
-            double[] a = A(teta);
             double[] buf;
 
             double x, module = 0, crossCPD = 0;
 
             for (int j = 0; j < 32; j++)
             {
+                double[] a = A(teta * j);
                 for (int i = 0; i <= length; i++)
                 {
                     x = xStart + i * h;
@@ -383,7 +383,7 @@ namespace Runge_Kutta
                 crossCPD += Math.Pow(module, 2);
             }
 
-            crossCPD = 1 - crossCPD / TPi;
+            crossCPD = 1 - crossCPD / 32;
 
             return crossCPD;
         }
