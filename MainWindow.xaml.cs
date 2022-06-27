@@ -151,7 +151,7 @@ namespace Runge_Kutta
             return d;
         }
 
-        public static void DrawCoordinates(string Units, double[] UE)
+        public static void DrawCoordinates(string Units, double[] UE, string[] lineHeaders)
         {
             int roundNum = 6;
             if (mwMainCanvas.ActualWidth <= 1000)
@@ -212,7 +212,22 @@ namespace Runge_Kutta
                 if (i * hv < centerh)
                 {
                     Label lab = new Label();
-                    lab.Content = Math.Round((centerh - i * hv) / UE[1], roundNum).ToString() + Units;
+                    if (i == 0)
+                    {
+                        lab.Content = Math.Round((centerh - i * hv) / UE[1], roundNum).ToString() + lineHeaders[0];
+                        lab.Foreground = Brushes.DarkRed;
+                        lab.FontWeight = FontWeights.Bold;
+                        Label lab1 = new Label();
+                        lab1.Foreground = Brushes.DarkRed;
+                        lab1.FontWeight = FontWeights.Bold;
+                        lab1.Content = lineHeaders[1];
+                        lab1.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
+                        mwMainCanvas.Children.Add(lab1);
+                    }
+                    else
+                    {
+                        lab.Content = Math.Round((centerh - i * hv) / UE[1], roundNum).ToString() + Units;
+                    }
                     lab.Margin = new Thickness(p1.X - 2, p1.Y - 2, 0, 0);
                     mwMainCanvas.Children.Add(lab);
                 }
@@ -233,23 +248,23 @@ namespace Runge_Kutta
             }
         }
 
-        public static void DrawPoints(List<double[]> ret, Brush brush, string Units)
+        public static void DrawPoints(List<double[]> ret, Brush brush, string Units, string[] lineHeaders)
         {
             double centerw = mwMainCanvas.ActualWidth / 2, centerh = mwMainCanvas.ActualHeight / 2;
             double[] ues = UE(ret, centerw, centerh);
             double uew = ues[0];
             double ueh = ues[1];
-            DrawCoordinates(Units, ues);
+            DrawCoordinates(Units, ues, lineHeaders);
 
             DrawSingleLine(ret, brush, centerw, centerh, uew, ueh);
         }
-        public static void DrawPoints(List<double[]> ret, Brush[] brush, string Units, int XIndex)
+        public static void DrawPoints(List<double[]> ret, Brush[] brush, string Units, int XIndex, string[] lineHeaders)
         {
             double centerw = mwMainCanvas.ActualWidth / 2, centerh = mwMainCanvas.ActualHeight / 2;
             double[] ues = UE(ret, centerw, centerh, XIndex);
             double uew = ues[0];
             double ueh = ues[1];
-            DrawCoordinates(Units, ues);
+            DrawCoordinates(Units, ues, lineHeaders);
 
             DrawMultiLine(ret, brush, centerw, centerh, uew, ueh, XIndex);
         }

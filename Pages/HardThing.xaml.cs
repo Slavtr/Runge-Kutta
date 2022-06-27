@@ -39,7 +39,7 @@ namespace Runge_Kutta.Pages
                 MainWindow.mwMainCanvas.Children.Clear();
                 MainWindow.mwMainTextBox.Text = "";
 
-                MainWindow.DrawPoints(ret, new Brush[] {((KeyValuePair<string, Brush>)cbDeistv.SelectedItem).Value, ((KeyValuePair<string, Brush>)cbMnim.SelectedItem).Value, ((KeyValuePair<string, Brush>)cbModule.SelectedItem).Value}, "у.е.", 3);
+                MainWindow.DrawPoints(ret, new Brush[] {((KeyValuePair<string, Brush>)cbDeistv.SelectedItem).Value, ((KeyValuePair<string, Brush>)cbMnim.SelectedItem).Value, ((KeyValuePair<string, Brush>)cbModule.SelectedItem).Value}, "", 3, new string[] {"\tПроизводная А", "Дзета (Х)"});
 
                 string str = "";
 
