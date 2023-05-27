@@ -3,7 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Windows.Documents;
+using System.Windows;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Runge_Kutta
 {
@@ -283,6 +289,7 @@ namespace Runge_Kutta
             double xEnd = -xStart;
             double length = Math.Round((xEnd - xStart) / h);
             List<double[]> ret = new List<double[]>();
+
             double[] a = A(teta);
             double[] buf;
 
@@ -297,46 +304,47 @@ namespace Runge_Kutta
                 module = Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2));
                 ret.Add(new double[] { a[0], a[1], module, x });
             }
+
             return ret;
         }
-        private static double[] Function3(double[] a, double x, double delta, double F, double mu)
+        private static double[] Function3(double[] a, double x, double delta, double f, double mu)
         {
             double[] ret = new double[2];
 
-            double moduleKvadr = Math.Pow(Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2)), 2);
-            double f1 = -(a[1] * (delta + moduleKvadr - 1));
-            double f2 = a[0] * (delta + moduleKvadr - 1) + FofX(x, mu, F);
+            double modulekvadr = Math.Pow(Math.Sqrt(Math.Pow(a[0], 2) + Math.Pow(a[1], 2)), 2);
+            double f1 = -(a[1] * (delta + modulekvadr - 1));
+            double f2 = a[0] * (delta + modulekvadr - 1) + FofX(x, mu, f);
 
             ret[0] = f1;
             ret[1] = f2;
 
             return ret;
         }
-        private static double[] DeltaY(double delta, double F, double x, double h, double[] prevA, double mu)
+        private static double[] DeltaY(double delta, double f, double x, double h, double[] preva, double mu)
         {
-            double[] k1 = Function3(prevA, x, delta, F, mu);
+            double[] k1 = Function3(preva, x, delta, f, mu);
             k1[0] *= h;
             k1[1] *= h;
             double[] buf = new double[4];
             buf[0] = k1[0] / 2;
             buf[1] = k1[1] / 2;
-            buf[0] += prevA[0];
-            buf[1] += prevA[1];
-            double[] k2 = Function3(buf, x + (h / 2), delta, F, mu);
+            buf[0] += preva[0];
+            buf[1] += preva[1];
+            double[] k2 = Function3(buf, x + (h / 2), delta, f, mu);
             k2[0] *= h;
             k2[1] *= h;
             buf[0] = k2[0] / 2;
             buf[1] = k2[1] / 2;
-            buf[0] += prevA[0];
-            buf[1] += prevA[1];
-            double[] k3 = Function3(buf, x + (h / 2), delta, F, mu);
+            buf[0] += preva[0];
+            buf[1] += preva[1];
+            double[] k3 = Function3(buf, x + (h / 2), delta, f, mu);
             k3[0] *= h;
             k3[1] *= h;
             buf[0] = k3[0];
             buf[1] = k3[1];
-            buf[0] += prevA[0];
-            buf[1] += prevA[1];
-            double[] k4 = Function3(buf, x + h, delta, F, mu);
+            buf[0] += preva[0];
+            buf[1] += preva[1];
+            double[] k4 = Function3(buf, x + h, delta, f, mu);
             k4[0] *= h;
             k4[1] *= h;
 
@@ -345,9 +353,9 @@ namespace Runge_Kutta
 
             return buf;
         }
-        private static double FofX(this double x, double mu, double F)
+        private static double FofX(this double x, double mu, double f)
         {
-            return F / (Math.Exp(4 * Math.Pow(x, 2) / Math.Pow(mu, 2)));
+            return f / (Math.Exp(4 * Math.Pow(x, 2) / Math.Pow(mu, 2)));
         }
         private static double[] A(double teta)
         {
@@ -358,7 +366,7 @@ namespace Runge_Kutta
         }
         #endregion
         #region Cross_CPD
-        public static double CrossCPD(double delta, double F, double mu, double h)
+        unsafe public static double CrossCPD(double delta, double F, double mu, double h)
         {
             double TPi = Math.PI * 2;
             double teta = TPi / 32;
@@ -391,21 +399,17 @@ namespace Runge_Kutta
         #region DeltaGraph
         public static List<double[]> DeltaCPDGraph(double deltaStart, double deltaEnd, double deltaH, double F, double mu, double h)
         {
-            List<double[]> result = new List<double[]>();
             double length = Math.Round(Math.Abs(deltaStart - deltaEnd) / deltaH);
+            List<double[]> ret = new List<double[]>();
 
-            double delta, crossCPD;
-
-            for(int i = 0; i < length; i++)
+            Parallel.For(0, (int)length, (int i) =>
             {
-                delta = deltaStart + i * deltaH;
+                ret.Add(new double[] { deltaStart + i * deltaH, CrossCPD(deltaStart + i * deltaH, F, mu, h) });
+            });
 
-                crossCPD = CrossCPD(delta, F, mu, h);
+            ret = ret.OrderBy(x => x[0]).ToList();
 
-                result.Add(new double[] { delta, crossCPD });
-            }
-
-            return result;
+            return ret;
         }
         #endregion
     }

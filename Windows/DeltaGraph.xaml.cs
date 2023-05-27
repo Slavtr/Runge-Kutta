@@ -24,7 +24,7 @@ namespace Runge_Kutta.Windows
             InitializeComponent();
         }
 
-        public void DrawDelta(double F, double mu, double h)
+        public async void DrawDelta(double F, double mu, double h)
         {
             List<double[]> ret;
             try
@@ -34,7 +34,7 @@ namespace Runge_Kutta.Windows
                 MainCanvas.Children.Clear();
                 TBPoints.Text = string.Empty;
 
-                DrawPoints(ret, Brushes.Black, " ", new string[] {"\tПоперечное электронное КПД", "Delta"});
+                DrawPoints(ret, Brushes.Black, " ", new string[] { "\tПоперечное электронное КПД", "Delta" });
 
                 string str = "";
 
@@ -165,13 +165,15 @@ namespace Runge_Kutta.Windows
             Line l;
             Point p;
             Ellipse ell;
+            double[] prev = null;
 
-            for (int i = 0; i < ret.Count; i++)
+            //for (int i = 0; i < ret.Count; i++)
+            foreach (double[] d in ret)
             {
-                if (ret[i][0] >= double.MinValue && ret[i][1] <= double.MaxValue)
+                if (d[0] >= double.MinValue && d[1] <= double.MaxValue)
                 {
-                    actw = centerw + ret[i][0] * uew;
-                    acth = centerh - ret[i][1] * ueh;
+                    actw = centerw + d[0] * uew;
+                    acth = centerh - d[1] * ueh;
 
                     p = new Point(actw, acth);
                     ell = new Ellipse();
@@ -184,11 +186,11 @@ namespace Runge_Kutta.Windows
                     ell.Margin = new Thickness(p.X - 2, p.Y - 2, 0, 0);
 
                     MainCanvas.Children.Add(ell);
-                    if (i != 0)
+                    if (prev != null)
                     {
                         l = new Line();
-                        l.X1 = centerw + ret[i - 1][0] * uew;
-                        l.Y1 = centerh - ret[i - 1][1] * ueh;
+                        l.X1 = centerw + prev[0] * uew;
+                        l.Y1 = centerh - prev[1] * ueh;
                         l.X2 = actw;
                         l.Y2 = acth;
 
@@ -197,6 +199,8 @@ namespace Runge_Kutta.Windows
 
                         MainCanvas.Children.Add(l);
                     }
+
+                    prev = d;
                 }
             }
         }

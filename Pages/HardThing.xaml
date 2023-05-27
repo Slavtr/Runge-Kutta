@@ -15,15 +15,15 @@
                 <TextBlock Text="Цвета графиков:" TextAlignment="Center" Margin="1px"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="1px">
                     <TextBlock Text="Действительная часть числа "/>
-                    <ComboBox x:Name="cbDeistv" DisplayMemberPath="Key"/>
+                    <ComboBox x:Name="cbDeistv" DisplayMemberPath="Key" SelectedValue="0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="1px">
                     <TextBlock Text="Мнимая часть числа "/>
-                    <ComboBox x:Name="cbMnim" DisplayMemberPath="Key"/>
+                    <ComboBox x:Name="cbMnim" DisplayMemberPath="Key" SelectedValue="1"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="1px">
                     <TextBlock Text="Модуль "/>
-                    <ComboBox x:Name="cbModule" DisplayMemberPath="Key"/>
+                    <ComboBox x:Name="cbModule" DisplayMemberPath="Key" SelectedValue="2"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="4,0,4,0">

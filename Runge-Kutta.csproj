@@ -6,6 +6,7 @@
     <RootNamespace>Runge_Kutta</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
 </Project>
